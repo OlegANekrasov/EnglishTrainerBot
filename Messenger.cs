@@ -8,6 +8,7 @@ using Telegram.Bot.Exceptions;
 using Telegram.Bot.Extensions.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+using Telegram.Bot.Types.ReplyMarkups;
 
 namespace EnglishTrainerBot
 {
@@ -26,7 +27,20 @@ namespace EnglishTrainerBot
         {
             var lastmessage = chat.GetLastMessage();
 
-            if(chat.isDictionaryMode)
+            if (chat.isTraningMode && chat.TraningTypeSelected)
+            {
+                if(lastmessage == "/stop")
+                {
+                    chat.isTraningMode = false;
+                    chat.TraningTypeSelected = false;
+                    await botClient.SendTextMessageAsync(chatId: chat.GetId(), text: "Тренировка остановлена!");
+                    return;
+                }
+                
+                await botClient.SendTextMessageAsync(chatId: chat.GetId(), text: "Начало трентровки");
+            }
+
+            if (chat.isDictionaryMode)
             {
                 var cmd = commandParser.GetCommand("/addword");
                 if (((AddWordCommand)cmd).AddState == AddingState.Finish)
@@ -40,7 +54,7 @@ namespace EnglishTrainerBot
                 }
             }
 
-            if (!chat.isDictionaryMode)
+            if (!chat.isDictionaryMode && !chat.isTraningMode)
             {
                 string commandStr = lastmessage;
                 int i = lastmessage.IndexOf(" ");
@@ -67,12 +81,52 @@ namespace EnglishTrainerBot
                             case "/deleteword":
                                 await ((DeleteWordCommand)cmd).RunCommand(chat, lastmessage.Substring(i).Trim());
                                 break;
+                            case "/training":
+                                if (chat.dictionary.Any())
+                                {
+                                    chat.isTraningMode = true;
+                                    await SendTextWithKeyBoard(chat);
+                                }
+                                else
+                                {
+                                    await botClient.SendTextMessageAsync(chatId: chat.GetId(), text: "Словарь пуст!");
+                                }
+                                break;
                         }
                     }
                 }
             }
         }
 
+        private async Task SendTextWithKeyBoard(Conversation chat)
+        {
+            //string text = messanger.CreateTextMessage(chat);
+            InlineKeyboardMarkup keyboard = ReturnKeyBoard();
+            await botClient.SendTextMessageAsync(chatId: chat.GetId(), 
+                text: "Выберите тип тренировки. Для окончания тренировки введите команду /stop", replyMarkup: keyboard);
+        }
+
+        private InlineKeyboardMarkup ReturnKeyBoard()
+        {
+            var buttonList = new List<InlineKeyboardButton>
+            {
+                new InlineKeyboardButton("С русского на английский")
+                {
+                  Text = "С русского на английский",
+                  CallbackData = "rustoeng"
+                },
+
+                new InlineKeyboardButton("С английского на русский")
+                {
+                  Text = "С английского на русский",
+                  CallbackData = "engtorus"
+                }
+            };
+
+            var keyboard = new InlineKeyboardMarkup(buttonList);
+
+            return keyboard;
+        }
         /*
         public string CreateTextMessage(Conversation chat)
         {

@@ -32,26 +32,41 @@ namespace EnglishTrainerBot
         {
             if (update.CallbackQuery != null)
             {
-                var text = "";
+                var Id = update.CallbackQuery.Message.Chat.Id;
 
-                switch (update.CallbackQuery.Data)
+                if (!chatList.ContainsKey(Id))
                 {
-                    case "pushkin":
-                        text = @"Я помню чудное мгновенье:
-                                    Передо мной явилась ты,
-                                    Как мимолетное виденье,
-                                    Как гений чистой красоты.";
-                        break;
-                    case "esenin":
-                        text = @"Не каждый умеет петь,
-                                Не каждому дано яблоком
-                                Падать к чужим ногам.";
-                        break;
-                    default:
-                        break;
+                    var newchat = new Conversation(update.CallbackQuery.Message.Chat);
+                    chatList.Add(Id, newchat);
                 }
 
-                await botClient.SendTextMessageAsync(update.CallbackQuery.Message.Chat.Id, text);
+                var chat = chatList[Id];
+
+                if (chat.isTraningMode && !chat.TraningTypeSelected)
+                {
+                    switch (update.CallbackQuery.Data)
+                    {
+                        case "rustoeng":
+                            chat.trainingType = TrainingType.RusToEng;
+                            chat.TraningTypeSelected = true;
+                            break;
+                        case "engtorus":
+                            chat.trainingType = TrainingType.RusToEng;
+                            chat.TraningTypeSelected = true;
+                            break;
+                        default:
+                            break;
+                    }
+
+                    await SendMessage(chat);
+                }
+
+                /*
+                if (chat.isTraningMode && chat.TraningTypeSelected)
+                {
+                    await botClient.SendTextMessageAsync(update.CallbackQuery.Message.Chat.Id, "gggg");
+                }
+                */
 
                 // Этот метод вызывается, чтобы «часики» на кнопке, которые обозначают ответ сервера,
                 // пропали — мы как раз отвечаем от сервера, что запрос обработан. 
@@ -64,7 +79,6 @@ namespace EnglishTrainerBot
                 if (!chatList.ContainsKey(Id))
                 {
                     var newchat = new Conversation(update.Message.Chat);
-
                     chatList.Add(Id, newchat);
                 }
 
@@ -72,7 +86,7 @@ namespace EnglishTrainerBot
 
                 chat.AddMessage(update.Message);
 
-                await SendMessage(chat);
+                 await SendMessage(chat);
                 //await SendTextMessage(chat);
                 //await SendTextWithKeyBoard(chat);
             }
@@ -97,7 +111,6 @@ namespace EnglishTrainerBot
             InlineKeyboardMarkup keyboard = ReturnKeyBoard();
             await botClient.SendTextMessageAsync(chatId: chat.GetId(), text: text, replyMarkup: keyboard);
         }
-        */
         private InlineKeyboardMarkup ReturnKeyBoard()
         {
             var buttonList = new List<InlineKeyboardButton>
@@ -119,5 +132,6 @@ namespace EnglishTrainerBot
 
             return keyboard;
         }
+        */
     }
 }

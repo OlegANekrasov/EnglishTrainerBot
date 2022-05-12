@@ -33,6 +33,16 @@ namespace EnglishTrainerBot
         /// </summary>
         public bool isTraningMode;
 
+        /// <summary>
+        /// Выбран тип тренировки
+        /// </summary>
+        public bool TraningTypeSelected;
+
+        /// <summary>
+        /// Тип тренировки
+        /// </summary>
+        public TrainingType trainingType;
+
         public Conversation(Chat chat)
         {
             telegramChat = chat;

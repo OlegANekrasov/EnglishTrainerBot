@@ -18,11 +18,12 @@ namespace EnglishTrainerBot
 
         public CommandParser(ITelegramBotClient botClient)
         {
-            Commands = new List<IChatCommand>();
+            Commands = new List<IChatCommand>(); 
 
             Commands.Add(new AddWordCommand(botClient));
             Commands.Add(new DictionaryCommand(botClient));
             Commands.Add(new DeleteWordCommand(botClient));
+            Commands.Add(new TrainingCommand(botClient));
         }
 
         public IChatCommand GetCommand(string commandText)
