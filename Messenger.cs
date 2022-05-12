@@ -42,7 +42,14 @@ namespace EnglishTrainerBot
 
             if (!chat.isDictionaryMode)
             {
-                var command = commandParser.GetCommand(lastmessage);
+                string commandStr = lastmessage;
+                int i = lastmessage.IndexOf(" ");
+                if (i != -1)
+                {
+                    commandStr = lastmessage.Substring(0, i);
+                }
+
+                var command = commandParser.GetCommand(commandStr);
                 if (command != null)
                 {
                     if (command is AbstractCommand cmd)
@@ -56,6 +63,9 @@ namespace EnglishTrainerBot
                                 break;
                             case "/dictionary":
                                 await ((DictionaryCommand)cmd).RunCommand(chat);
+                                break;
+                            case "/deleteword":
+                                await ((DeleteWordCommand)cmd).RunCommand(chat, lastmessage.Substring(i).Trim());
                                 break;
                         }
                     }
