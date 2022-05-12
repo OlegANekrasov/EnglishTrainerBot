@@ -29,15 +29,23 @@ namespace EnglishTrainerBot
 
             if (chat.isTraningMode && chat.TraningTypeSelected)
             {
-                if(lastmessage == "/stop")
+                var cmd = commandParser.GetCommand("/training");
+                
+                if(!chat.isSetWords)
+                {
+                    ((TrainingCommand)cmd).SetWords(chat, chat.dictionary);
+                    chat.isSetWords = true;
+                }
+                if (lastmessage == "/stop") //|| ((TrainingCommand)cmd).isEndArray()
                 {
                     chat.isTraningMode = false;
                     chat.TraningTypeSelected = false;
-                    await botClient.SendTextMessageAsync(chatId: chat.GetId(), text: "Тренировка остановлена!");
+                    chat.isSetWords = false;
+                    await botClient.SendTextMessageAsync(chatId: chat.GetId(), text: "Тренировка завершена!");
                     return;
                 }
-                
-                await botClient.SendTextMessageAsync(chatId: chat.GetId(), text: "Начало трентровки");
+
+                await ((TrainingCommand)cmd).RunCommand(chat, lastmessage);
             }
 
             if (chat.isDictionaryMode)

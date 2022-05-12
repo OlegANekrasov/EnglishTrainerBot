@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Telegram.Bot.Types;
+using System.Linq;
 
 namespace EnglishTrainerBot
 {
@@ -43,6 +44,11 @@ namespace EnglishTrainerBot
         /// </summary>
         public TrainingType trainingType;
 
+        /// <summary>
+        /// Загружен список слов для тренировки
+        /// </summary>
+        public bool isSetWords;
+
         public Conversation(Chat chat)
         {
             telegramChat = chat;
@@ -74,5 +80,25 @@ namespace EnglishTrainerBot
 
         public string GetLastMessage() => telegramMessages[telegramMessages.Count - 1].Text;
 
+        public bool CheckWord(string word, string answer)
+        {
+            Word control;
+            var result = false;
+
+            switch (trainingType)
+            {
+                case TrainingType.EngToRus:
+                    control = dictionary.FirstOrDefault(x => x.English == word);
+                    result = control.Russian.ToUpper() == answer.ToUpper();
+                    break;
+
+                case TrainingType.RusToEng:
+                    control = dictionary.FirstOrDefault(x => x.Russian == word);
+                    result = control.English.ToUpper() == answer.ToUpper();
+                    break;
+            }
+
+            return result;
+        }
     }
 }

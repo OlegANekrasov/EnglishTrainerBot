@@ -46,11 +46,11 @@ namespace EnglishTrainerBot
                 {
                     switch (update.CallbackQuery.Data)
                     {
-                        case "rustoeng":
-                            chat.trainingType = TrainingType.RusToEng;
+                        case "engtorus":
+                            chat.trainingType = TrainingType.EngToRus;
                             chat.TraningTypeSelected = true;
                             break;
-                        case "engtorus":
+                        case "rustoeng":
                             chat.trainingType = TrainingType.RusToEng;
                             chat.TraningTypeSelected = true;
                             break;
