@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Telegram.Bot;
+using Telegram.Bot.Exceptions;
+using Telegram.Bot.Extensions.Polling;
+using Telegram.Bot.Types;
+using Telegram.Bot.Types.ReplyMarkups;
+
 
 namespace EnglishTrainerBot
 {
@@ -10,12 +16,13 @@ namespace EnglishTrainerBot
     {
         private List<IChatCommand> Commands;
 
-        public CommandParser()
+        public CommandParser(ITelegramBotClient botClient)
         {
             Commands = new List<IChatCommand>();
 
-            //Commands.Add(new AskMeCommand());
-            //Commands.Add(new SayHiCommand());
+            Commands.Add(new AddWordCommand(botClient));
+            Commands.Add(new DictionaryCommand(botClient));
+            Commands.Add(new DeleteWordCommand(botClient));
         }
 
         public IChatCommand GetCommand(string commandText)

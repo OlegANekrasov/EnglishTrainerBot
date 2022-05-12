@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EnglishTrainerBot.Model
+namespace EnglishTrainerBot
 {
     /// <summary>
     /// Тип перевода: с русского на английский или с английского на русский

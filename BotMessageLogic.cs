@@ -11,9 +11,7 @@ using Telegram.Bot.Types.ReplyMarkups;
 namespace EnglishTrainerBot
 {
     /// <summary>
-    /// Объект этого класса должен управлять логикой обработки полученных сообщений через метод Response
-    /// Логикой добавления чатов управляет только класс
-    /// Также управляет отправкой сообщений
+    /// Объект этого класса обрабатывает полученные сообщения через метод Response
     /// </summary>
     public class BotMessageLogic
     {
@@ -25,9 +23,9 @@ namespace EnglishTrainerBot
         public BotMessageLogic(ITelegramBotClient botClient)
         {
             this.botClient = botClient;
-            messanger = new Messenger();
+            messanger = new Messenger(botClient);
+            commandParser = new CommandParser(botClient);
             chatList = new Dictionary<long, Conversation>();
-            commandParser = new CommandParser();
         }
 
         public async Task Response(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
@@ -74,25 +72,32 @@ namespace EnglishTrainerBot
 
                 chat.AddMessage(update.Message);
 
+                await SendMessage(chat);
                 //await SendTextMessage(chat);
-                await SendTextWithKeyBoard(chat);
+                //await SendTextWithKeyBoard(chat);
             }
         }
 
+        private async Task SendMessage(Conversation chat)
+        {
+            await messanger.MakeAnswer(chat);
+        }
+
+        /*
         private async Task SendTextMessage(Conversation chat)
         {
-            var text = messanger.CreateTextMessage(chat, commandParser);
+            var text = messanger.CreateTextMessage(chat);
 
             await botClient.SendTextMessageAsync(chatId: chat.GetId(), text: text);
         }
 
         private async Task SendTextWithKeyBoard(Conversation chat)
         {
-            string text = messanger.CreateTextMessage(chat, commandParser);
+            string text = messanger.CreateTextMessage(chat);
             InlineKeyboardMarkup keyboard = ReturnKeyBoard();
             await botClient.SendTextMessageAsync(chatId: chat.GetId(), text: text, replyMarkup: keyboard);
         }
-
+        */
         private InlineKeyboardMarkup ReturnKeyBoard()
         {
             var buttonList = new List<InlineKeyboardButton>

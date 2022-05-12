@@ -18,10 +18,26 @@ namespace EnglishTrainerBot
         /// </summary>
         private List<Message> telegramMessages;
 
+        /// <summary>
+        /// Список слов с переводом и темой
+        /// </summary>
+        public List<Word> dictionary;
+
+        /// <summary>
+        /// Добавление слов
+        /// </summary>
+        public bool isDictionaryMode;
+
+        /// <summary>
+        /// Тренировка перевода
+        /// </summary>
+        public bool isTraningMode;
+
         public Conversation(Chat chat)
         {
             telegramChat = chat;
             telegramMessages = new List<Message>();
+            dictionary = new List<Word>();
         }
 
         public void AddMessage(Message message)
