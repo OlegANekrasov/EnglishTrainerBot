@@ -1,12 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Telegram.Bot;
 
 namespace EnglishTrainerBot
 {
+    /// <summary>
+    /// Команда удаления слова из словаря
+    /// </summary>
     class DeleteWordCommand : AbstractCommand
     {
         private ITelegramBotClient botClient;

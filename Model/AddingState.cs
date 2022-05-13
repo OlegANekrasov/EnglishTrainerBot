@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EnglishTrainerBot
 {
+    /// <summary>
+    /// Этапы добавления Слова в Словарь
+    /// </summary>
     public enum AddingState
     {
         Russian,

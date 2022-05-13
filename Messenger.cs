@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Telegram.Bot;
-using Telegram.Bot.Exceptions;
-using Telegram.Bot.Extensions.Polling;
-using Telegram.Bot.Types;
-using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace EnglishTrainerBot
@@ -108,7 +103,6 @@ namespace EnglishTrainerBot
 
         private async Task SendTextWithKeyBoard(Conversation chat)
         {
-            //string text = messanger.CreateTextMessage(chat);
             InlineKeyboardMarkup keyboard = ReturnKeyBoard();
             await botClient.SendTextMessageAsync(chatId: chat.GetId(), 
                 text: "Выберите тип тренировки. Для окончания тренировки введите команду /stop", replyMarkup: keyboard);
@@ -135,25 +129,5 @@ namespace EnglishTrainerBot
 
             return keyboard;
         }
-        /*
-        public string CreateTextMessage(Conversation chat)
-        {
-            var text = "";
-            var lastMessage = chat.GetLastMessage();
-
-            var command = commandParser.GetCommand(lastMessage);
-            if (command != null)
-            {
-                text = ((IChatTextCommand)command).ReturnText();
-            }
-            else
-            {
-                var delimiter = ",";
-                text = "История ваших сообщений: " + string.Join(delimiter, chat.GetTextMessages().ToArray());
-            }
-
-            return text;
-        }
-        */
     }
 }

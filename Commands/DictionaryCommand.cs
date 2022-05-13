@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,6 +6,9 @@ using Telegram.Bot;
 
 namespace EnglishTrainerBot
 {
+    /// <summary>
+    /// Команда отображения всех сохраненных слов 
+    /// </summary>
     public class DictionaryCommand : AbstractCommand
     {
         private ITelegramBotClient botClient;

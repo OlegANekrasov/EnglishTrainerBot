@@ -3,10 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Telegram.Bot;
-using Telegram.Bot.Exceptions;
-using Telegram.Bot.Extensions.Polling;
 using Telegram.Bot.Types;
-using Telegram.Bot.Types.ReplyMarkups;
 
 namespace EnglishTrainerBot
 {
@@ -61,13 +58,6 @@ namespace EnglishTrainerBot
                     await SendMessage(chat);
                 }
 
-                /*
-                if (chat.isTraningMode && chat.TraningTypeSelected)
-                {
-                    await botClient.SendTextMessageAsync(update.CallbackQuery.Message.Chat.Id, "gggg");
-                }
-                */
-
                 // Этот метод вызывается, чтобы «часики» на кнопке, которые обозначают ответ сервера,
                 // пропали — мы как раз отвечаем от сервера, что запрос обработан. 
                 await botClient.AnswerCallbackQueryAsync(update.CallbackQuery.Id);
@@ -86,9 +76,7 @@ namespace EnglishTrainerBot
 
                 chat.AddMessage(update.Message);
 
-                 await SendMessage(chat);
-                //await SendTextMessage(chat);
-                //await SendTextWithKeyBoard(chat);
+                await SendMessage(chat);
             }
         }
 
@@ -96,42 +84,5 @@ namespace EnglishTrainerBot
         {
             await messanger.MakeAnswer(chat);
         }
-
-        /*
-        private async Task SendTextMessage(Conversation chat)
-        {
-            var text = messanger.CreateTextMessage(chat);
-
-            await botClient.SendTextMessageAsync(chatId: chat.GetId(), text: text);
-        }
-
-        private async Task SendTextWithKeyBoard(Conversation chat)
-        {
-            string text = messanger.CreateTextMessage(chat);
-            InlineKeyboardMarkup keyboard = ReturnKeyBoard();
-            await botClient.SendTextMessageAsync(chatId: chat.GetId(), text: text, replyMarkup: keyboard);
-        }
-        private InlineKeyboardMarkup ReturnKeyBoard()
-        {
-            var buttonList = new List<InlineKeyboardButton>
-            {
-                new InlineKeyboardButton("Пушкин")
-                {
-                  Text = "Пушкин",
-                  CallbackData = "pushkin"
-                },
-
-                new InlineKeyboardButton("Есенин")
-                {
-                  Text = "Есенин",
-                  CallbackData = "esenin"
-                }
-            };
-
-            var keyboard = new InlineKeyboardMarkup(buttonList);
-
-            return keyboard;
-        }
-        */
     }
 }
